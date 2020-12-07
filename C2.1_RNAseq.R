@@ -5,6 +5,7 @@ setwd('C:/Users/user/Desktop')
 
 ###########################
 # Load Data
+# https://www.cell.com/cell-stem-cell/fulltext/S1934-5909(18)30602-7
 ORIG_MAT=read.table('COUNT_MAT.txt',row.names=1,header=TRUE,sep='\t')
 
 
