@@ -311,7 +311,7 @@ Heatmap(mat, row_title='', name="V",
     }
 
 
-.getGSEAinput(DATA=MAT_RPKM[,1:4], TAG=c('D0','D0','D7','D7'), PATH='./' )
+.getGSEAinput(DATA=MAT_RPKM[,1:4], TAG=c('D0','D0','D7','D7'), PATH='./GSEA' )
 
 
 
