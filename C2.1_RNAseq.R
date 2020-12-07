@@ -106,6 +106,15 @@ par(mfrow=c(1,1))
 
 
 
+############################################
+# PCA
+pca=prcomp(t(MAT_RPKM_LOG_STD),center=FALSE,scale=FALSE)
+
+plot(pca$x[,1],pca$x[,2],xlim=c(-140,160),ylim=c(-100,100))
+set.seed(123)
+text(label=rownames(pca$x),x=pca$x[,1], y=pca$x[,2], pos=sample(c(1,2,3,4),nrow(pca$x),replace = TRUE))
+
+
 ###########################
 # https://bioconductor.org/packages/release/bioc/html/DESeq2.html
 # Install DESeq2
@@ -192,6 +201,102 @@ D7_OUT=all_res[which( LOG2FC< -log(FOLD_CUT,2) & PADJ < PADG_CUT),]
 
 write.table(D0_OUT,file='D0_DESeq2_result.txt',sep='\t',row.names=TRUE,col.names=TRUE,quote=FALSE)
 write.table(D7_OUT,file='D7_DESeq2_result.txt',sep='\t',row.names=TRUE,col.names=TRUE,quote=FALSE)
+
+
+
+#####################################
+# Install ComplexHeatmap ...
+install packages('circlize')
+install packages('seriation')
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("ComplexHeatmap")
+######################################
+
+
+library('ComplexHeatmap')
+library('circlize')
+library('seriation')
+
+
+HM_MAT=all_res[which( abs(LOG2FC) > log(FOLD_CUT,2) & PADJ < PADG_CUT),]
+HM_MAT=HM_MAT[order(HM_MAT$log2FoldChange),]
+
+USED_HM_MAT=HM_MAT[,5:8]
+USED_HM_MAT_LOG=log(USED_HM_MAT+1,10)
+USED_HM_MAT_LOG_STD=t(apply(USED_HM_MAT_LOG,1,scale))
+colnames(USED_HM_MAT_LOG_STD)=colnames(USED_HM_MAT_LOG)
+
+
+
+mat=USED_HM_MAT_LOG_STD
+mat=as.matrix(mat)
+colnames(mat)=c('D0R1','D0R2','D7R1','D7R2')
+color_fun =colorRamp2(c(-1,-0.5,0,0.5,1 ), c('royalblue3','white','white','white','indianred3'))
+
+SHOW_GENE= c('CGA','KRT23','LEFTY1','POU5F1')
+SHOW_INDEX=which(rownames(mat) %in% SHOW_GENE)
+SHOW_NAME=rownames(mat)[SHOW_INDEX]
+ha = rowAnnotation(foo = anno_mark(at = SHOW_INDEX ,  labels =SHOW_NAME))
+
+Heatmap(mat, row_title='', name="V",
+        cluster_columns=FALSE, cluster_rows=FALSE,
+	      show_column_dend = FALSE, show_row_dend = FALSE, 
+	      show_column_names=TRUE, show_row_names=FALSE,
+	      col=color_fun, border = TRUE ,
+         right_annotation = ha
+	      )
+
+
+pdf('f2_Heatmap.pdf',width=4,height=6)
+Heatmap(mat, row_title='', name="V",
+        cluster_columns=FALSE, cluster_rows=FALSE,
+	      show_column_dend = FALSE, show_row_dend = FALSE, 
+	      show_column_names=TRUE, show_row_names=FALSE,
+	      col=color_fun, border = TRUE ,
+         right_annotation = ha
+	      )
+dev.off()
+
+########################################
+
+
+
+mat=USED_HM_MAT_LOG
+mat=as.matrix(mat)
+colnames(mat)=c('D0R1','D0R2','D7R1','D7R2')
+color_fun =colorRamp2(c(0,1,3 ), c('royalblue3','yellow1','yellow3'))
+
+SHOW_GENE= c('CGA','KRT23','LEFTY1','POU5F1')
+SHOW_INDEX=which(rownames(mat) %in% SHOW_GENE)
+SHOW_NAME=rownames(mat)[SHOW_INDEX]
+ha = rowAnnotation(foo = anno_mark(at = SHOW_INDEX ,  labels =SHOW_NAME))
+
+Heatmap(mat, row_title='', name="V",
+        cluster_columns=FALSE, cluster_rows=FALSE,
+	      show_column_dend = FALSE, show_row_dend = FALSE, 
+	      show_column_names=TRUE, show_row_names=FALSE,
+	      col=color_fun, border = TRUE ,
+         right_annotation = ha
+	      )
+
+
+
+
+
+##############################################################################
+# GSEA
+
+
+
+
+
+
+
+
+
 
 
 
