@@ -190,7 +190,8 @@ D0_OUT=all_res[which( LOG2FC> log(FOLD_CUT,2) & PADJ < PADG_CUT),]
 D7_OUT=all_res[which( LOG2FC< -log(FOLD_CUT,2) & PADJ < PADG_CUT),]
 
 
-
+write.table(D0_OUT,file='D0_DESeq2_result.txt',sep='\t',row.names=TRUE,col.names=TRUE,quote=FALSE)
+write.table(D7_OUT,file='D7_DESeq2_result.txt',sep='\t',row.names=TRUE,col.names=TRUE,quote=FALSE)
 
 
 
