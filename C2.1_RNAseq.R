@@ -5,22 +5,22 @@ setwd('C:/Users/user/Desktop')
 
 ###########################
 # Load Data
-COUNT_MAT=read.table('COUNT_MAT.txt',row.names=1,header=TRUE,sep='\t')
+ORIG_MAT=read.table('COUNT_MAT.txt',row.names=1,header=TRUE,sep='\t')
 
 
 ###########################
 # Check header
-head(COUNT_MAT)
+head(ORIG_MAT)
 
 
 ###########################
 # Check size 
-dim(COUNT_MAT)
+dim(ORIG_MAT)
 
 
 ###########################
-GENE_LENGTH=COUNT_MAT[,1]
-MAT_COUNT=COUNT_MAT[,2:ncol(COUNT_MAT)]
+GENE_LENGTH=ORIG_MAT[,1]
+MAT_COUNT=ORIG_MAT[,2:ncol(ORIG_MAT)]
 
 
 ##############################
@@ -288,6 +288,30 @@ Heatmap(mat, row_title='', name="V",
 
 ##############################################################################
 # GSEA
+
+.getGSEAinput <- function( DATA, TAG, PATH ){
+    DATA=as.matrix(DATA)
+    TAG=TAG
+    VAR=apply(DATA,1,var)
+    DATA=DATA[which(VAR>0),]
+    ########################
+    EXP.FILE=paste0(PATH,'.EXP.txt')
+    colnames(DATA)=paste0(TAG,'_',colnames(DATA))
+    OUT=cbind(toupper(rownames(DATA)),rep('NO',nrow(DATA)),DATA)
+    colnames(OUT)[c(1,2)]=c('GENE','DESCRIPTION')
+    write.table(OUT, EXP.FILE, sep='\t',quote=F,row.names=F,col.names=T)
+    
+    #########################
+    PT.FILE=paste0(PATH,'.PT.cls')
+    PT=t(as.character(TAG))
+    cat(paste0(length(TAG),' 2 1'),file=PT.FILE,sep="\n") 
+    cat(paste(c('#',unique(TAG)),collapse=' '),file=PT.FILE,sep='\n',append=TRUE)
+    cat(PT,file=PT.FILE,sep=' ',append=TRUE)
+    ##########################  
+    }
+
+
+.getGSEAinput(DATA=MAT_RPKM[,1:4], TAG=c('D0','D0','D7','D7'), PATH='./' )
 
 
 
