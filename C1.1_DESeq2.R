@@ -1,3 +1,7 @@
+##########################
+# Set working directory
+setwd('C:/Users/user/Desktop')
+
 ###########################
 # Load Data
 COUNT_MAT=read.table('ALL.SE.MAT.txt',row.names=1,header=TRUE,sep='\t')
