@@ -8,8 +8,8 @@ BiocManager::install("DESeq2")
 
 #####################################
 # Install ComplexHeatmap and dependencies...
-install packages('circlize')
-install packages('seriation')
+install.packages('circlize')
+install.packages('seriation')
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
