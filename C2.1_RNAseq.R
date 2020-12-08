@@ -207,8 +207,8 @@ write.table(D7_OUT,file='D7_DESeq2_result.txt',sep='\t',row.names=TRUE,col.names
 
 #####################################
 # Install ComplexHeatmap ...
-install packages('circlize')
-install packages('seriation')
+install.packages('circlize')
+install.packages('seriation')
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
